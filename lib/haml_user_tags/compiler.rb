@@ -11,8 +11,10 @@ module HamlUserTags
     def convert_user_tag_to_script(node)
       t = node.value
       attributes = t[:attributes]
-      attributes_hashes = t[:attributes_hashes]
+      attributes_hashes = t[:attributes_hashes] || [t[:dynamic_attributes].old].compact
       object_ref = t[:object_ref]
+
+      attributes_hashes = attributes_hashes.map{|ah| ah.gsub(/^{/, '').gsub(/}$/, '')}
 
       if object_ref == "nil" and attributes.length == 0 and attributes_hashes.empty?
         attributes = "{}"
